@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>دیوار</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="/assets/images/logos/divar.svg" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="/dist/css/mapp.min.css" />
+    <link rel="stylesheet" href="/dist/css/fa/style.css" />
+    //Neshan Map
+    <link rel="stylesheet" href="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.css" />
+
+  </head>
+
+  <body>
+    <!--  Body Wrapper -->
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-layout="vertical"
+      data-navbarbg="skin6"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed">
+      <!-- Sidebar Start -->
+      <%-include("./sidebar.ejs")%>
+      <!--  Sidebar End -->
+      <!--  Main wrapper -->
+      <div class="body-wrapper">
+        <!--  Header Start -->
+        <%-include("./header.ejs")%>
+        <!--  Header End -->
+        <div class="container-fluid">
+          <!--  Row 1 -->
+          <%-body%>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/sidebarmenu.js"></script>
+  <script src="/assets/js/app.min.js"></script>
+  <script src="/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+  <script src="/assets/libs/simplebar/dist/simplebar.js"></script>
+  <script src="/assets/js/dashboard.js"></script>
+
+//Neshan Map
+<script src="https://static.neshan.org/sdk/leaflet/1.4.0/leaflet.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const WEB_API_KEY = "web.0da26cd8e6c948a8ae2f838e09a62151";
+  // ایجاد نقشه
+  var myMap = new L.Map("map", {
+    key: WEB_API_KEY,
+    maptype: "dreamy",
+    poi: true,
+    traffic: false,
+    center: [35.699739, 51.338097], // مرکز اولیه (تهران)
+    zoom: 13,
+  });
+
+  // مارکر اولیه
+  var marker = L.marker([35.699739, 51.338097], { draggable: true }).addTo(myMap);
+
+  // تابع بروزرسانی inputها
+  function updateInputs(lat, lng) {
+    document.getElementById("lat").value = lat;
+    document.getElementById("lng").value = lng;
+  }
+
+  // کلیک روی نقشه → حرکت مارکر
+  myMap.on("click", function (e) {
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+    marker.setLatLng([lat, lng]);
+    updateInputs(lat, lng);
+  });
+
+  // درگ مارکر → بروزرسانی مختصات
+  marker.on("dragend", function () {
+    var pos = marker.getLatLng();
+    updateInputs(pos.lat, pos.lng);
+  });
+});
+  </script>
+</body>
+
+</html>
